@@ -1,10 +1,8 @@
 package spark.Lambda;
 
-import spark.Request;
-import spark.Response;
-import spark.Route;
-import spark.Spark;
+import spark.*;
 
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 /**
@@ -116,6 +114,7 @@ public final class SparkLambda {
      * This calls the Spark PATCH function with the provided Route and Lambda
      * @param route This is a string with the expression for the matching route
      * @param lambda The lambda expression to handle the route
+     *
      */
     public static void patch(String route, BiFunction<Request, Response, Object> lambda) {
 
@@ -124,6 +123,63 @@ public final class SparkLambda {
             @Override
             public Object handle(Request request, Response response) {
                 return lambda.apply(request, response);
+            }
+        });
+    }
+
+    /**
+     * This calls the Spark Before Filter function with the provided Lambda expression for the filter
+     * @param lambda The lambda expression to handle the route
+     *
+     */
+    public static void before(BiConsumer<Request, Response> lambda) {
+        Spark.before(new Filter() {
+            @Override
+            public void handle(Request request, Response response) {
+                lambda.accept(request, response);
+            }
+        });
+    }
+
+    /**
+     * This calls the Spark After Filter function with the provided Lambda expression for the filter
+     * @param lambda The lambda expression to handle the route
+     */
+    public static void after(BiConsumer<Request, Response> lambda) {
+        Spark.after(new Filter() {
+            @Override
+            public void handle(Request request, Response response) {
+                lambda.accept(request, response);
+            }
+        });
+    }
+
+    /**
+     * This calls the Spark Before Filter function with the provided Lambda expression for the filter and the pattern
+     * @param pattern The pattern to match for the filter
+     * @param lambda The lambda expression to handle the route
+     *
+     */
+    public static void before(String pattern, BiConsumer<Request, Response> lambda) {
+        Spark.before(new Filter(pattern) {
+            @Override
+            public void handle(Request request, Response response) {
+                lambda.accept(request, response);
+            }
+        });
+    }
+
+    /**
+     * This calls the Spark After Filter function with the provided Lambda expression for the filter and the pattern
+     * @param pattern The pattern to match for the filter
+     * @param lambda The lambda expression to handle the route
+     *
+     */
+    public static void after(String pattern, BiConsumer<Request, Response> lambda) {
+        Spark.after(new Filter(pattern) {
+            @Override
+            public void handle(Request request, Response response) {
+                lambda.accept(request, response);
             }
         });
     }

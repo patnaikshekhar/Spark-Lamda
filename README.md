@@ -1,6 +1,5 @@
 # Spark Lambda
 
------------------------------------------
 > **Overview**
 >
 > This is an example of how the new Java 8 Lambda Expressions can be using with the spark framework in order to make the code a little more concise.
