@@ -1,3 +1,5 @@
+import spark.Spark;
+
 import static spark.Lambda.SparkLambda.*;
 
 /**
@@ -7,6 +9,7 @@ import static spark.Lambda.SparkLambda.*;
 public class Sample {
 
     public static void main(String[] args) {
+        Spark.setPort(8080);
         get("/", (request, response) -> "Hello Lambda");
     }
 }
